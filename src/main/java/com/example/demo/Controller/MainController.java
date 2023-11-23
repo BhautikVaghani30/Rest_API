@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Services.Servisec;
@@ -34,8 +33,11 @@ public class MainController {
           if (list.size() <= 0) {
                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
           }
-       return ResponseEntity.of(Optional.of(list));
+       return ResponseEntity.status(HttpStatus.CREATED).body(list);
    }
+
+
+
    @GetMapping("/student/{id}")
    public ResponseEntity<Studant> getOne(@PathVariable("id") int id){
           Studant s = this.service.getSingleStudent(id);
@@ -44,6 +46,10 @@ public class MainController {
           }
         return ResponseEntity.of(Optional.of(s));
    }
+
+
+
+
    @PostMapping("/student")
    public ResponseEntity<Studant> add(@RequestBody Studant studant){
      Studant s = null;
@@ -57,6 +63,11 @@ public class MainController {
         
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
    }
+
+
+
+
+
    @DeleteMapping("student/{id}")
    public ResponseEntity<Void> delete(@PathVariable("id") int id){
     try {
@@ -68,16 +79,16 @@ public class MainController {
     
    }
    @PutMapping("student/{id}")
-   public ResponseEntity<Studant> Update(@RequestBody Studant stud , @PathVariable("id") int id){
+   public ResponseEntity<Void> Update(@RequestBody Studant stud , @PathVariable("id") int id){
      Studant s = null;
      try {
-          s=this.service.Update(stud,id);
-        return ResponseEntity.ok().body(s);
+          this.service.Update(stud,id);
+        return ResponseEntity.ok().build();
 
           
      } catch (Exception e) {
          e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
      }
-     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
    }
 }

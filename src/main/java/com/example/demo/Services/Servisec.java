@@ -24,13 +24,20 @@ public class Servisec {
     }
 
     public Studant getSingleStudent(int id) {
-        return list.stream().filter(e -> e.getId() == id).findFirst().get();
+        Studant stud = null;
+        try {
+             stud =  list.stream().filter(e -> e.getId() == id).findFirst().get();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stud;
 
     }
 
-    public void add(Studant studant) {
+    public Studant add(Studant studant) {
         list.add(studant);
-        return;
+        return studant;
     }
 
     public String delete(int id) {
